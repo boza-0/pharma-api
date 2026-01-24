@@ -4,5 +4,5 @@ import productosRoutes from './productos.routes.js';
 
 export const router = Router();
 
-router.use('/catalog', catalogRoutes);
+router.use('/', catalogRoutes);
 router.use('/productos', productosRoutes);
