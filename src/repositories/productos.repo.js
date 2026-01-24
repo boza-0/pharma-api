@@ -24,17 +24,29 @@ export async function searchProductos(filters) {
   }
 
   if (filters.categoriaId) {
-    values.push(Number(filters.categoriaId));
+    const categoriaId = Number(filters.categoriaId);
+    if (!Number.isInteger(categoriaId)) {
+      return [];
+    }
+    values.push(categoriaId);
     conditions.push(`p.categoria_id = $${idx++}`);
   }
 
   if (filters.subcategoriaId) {
-    values.push(Number(filters.subcategoriaId));
+    const subcategoriaId = Number(filters.subcategoriaId);
+    if (!Number.isInteger(subcategoriaId)) {
+      return [];
+    }
+    values.push(subcategoriaId);
     conditions.push(`p.subcategoria_id = $${idx++}`);
   }
 
   if (filters.familiaId) {
-    values.push(Number(filters.familiaId));
+    const familiaId = Number(filters.familiaId);
+    if (!Number.isInteger(familiaId)) {
+      return [];
+    }
+    values.push(familiaId);
     conditions.push(`p.familia_id = $${idx++}`);
   }
 
