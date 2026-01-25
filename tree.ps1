@@ -1,6 +1,7 @@
 # TREE SNAPSHOT (tolerant)
 # - All folders and files listed when accessible
 # - File contents shown unless explicitly suppressed
+# - File contents may be suppressed by exact filename or by file extension
 # - Suppressed folders do not expand
 # - Unreadable folders/files are marked, never crash traversal
 # - Reparse points (symlinks/junctions) are shown but not expanded (prevents loops)
@@ -16,6 +17,12 @@ $SuppressFolderContent = @(
 $SuppressFileContent = @(
   'package-lock.json',
   'tree.ps1'
+)
+
+# File extensions whose CONTENTS should be suppressed (case-insensitive)
+$SuppressFileExtensions = @(
+  '.lock',
+  '.log'
 )
 
 # Prevent infinite recursion via symlinks/junctions and also avoid duplicating work
@@ -89,8 +96,19 @@ function Show-Tree {
         $lineCount = Get-SafeLineCount -filePath $_.FullName
         Write-Output ("{0}{1} (lines: {2})" -f $indent, $_.Name, $lineCount)
 
+        # Precedence:
+        # 1) Exact filename suppression
+        # 2) Extension-based suppression
+        # 3) Content display
+
         if ($SuppressFileContent -contains $_.Name) {
           Write-Output ("{0}  | <CONTENT SUPPRESSED: FILE>" -f $indent)
+          return
+        }
+
+        $extension = [IO.Path]::GetExtension($_.Name)
+        if ($SuppressFileExtensions -contains $extension) {
+          Write-Output ("{0}  | <CONTENT SUPPRESSED: FILE EXTENSION {1}>" -f $indent, $extension)
           return
         }
 
