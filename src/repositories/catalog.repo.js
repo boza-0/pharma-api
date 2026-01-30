@@ -87,3 +87,29 @@ export async function getSubcategoriaById(categoriaId, id) {
   return rows[0] || null;
 }
 
+export async function getFamiliaById(categoriaId, subcategoriaId, id) {
+  const { rows } = await pool.query(
+    `
+    SELECT
+      f.id,
+      f.nombre,
+      f.abbreviation,
+      sc.id     AS subcategoria_id,
+      sc.nombre AS subcategoria_nombre,
+      c.id      AS categoria_id,
+      c.nombre  AS categoria_nombre
+    FROM familia f
+    JOIN subcategoria sc
+      ON sc.id = f.subcategoria_id
+     AND sc.categoria_id = f.categoria_id
+    JOIN categoria c
+      ON c.id = f.categoria_id
+    WHERE f.id = $1
+      AND f.subcategoria_id = $2
+      AND f.categoria_id = $3
+    `,
+    [id, subcategoriaId, categoriaId]
+  );
+
+  return rows[0] || null;
+}

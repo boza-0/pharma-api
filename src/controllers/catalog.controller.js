@@ -18,3 +18,12 @@ export const getSubcategoria = asyncHandler(async (req, res) => {
   );
   res.json(subcategoria);
 });
+
+export const getFamilia = asyncHandler(async (req, res) => {
+  const familia = await service.getFamilia(
+    req.params.categoriaId,
+    req.params.subcategoriaId,
+    req.params.id
+  );
+  res.json(familia);
+});

@@ -28,3 +28,24 @@ export async function getSubcategoria(categoriaId, id) {
     }
   };
 }
+
+export async function getFamilia(categoriaId, subcategoriaId, id) {
+  const familia = await repo.getFamiliaById(categoriaId, subcategoriaId, id);
+  if (!familia) {
+    throw new Error('NOT_FOUND');
+  }
+
+  return {
+    id: familia.id,
+    nombre: familia.nombre,
+    abbreviation: familia.abbreviation,
+    subcategoria: {
+      id: familia.subcategoria_id,
+      nombre: familia.subcategoria_nombre
+    },
+    categoria: {
+      id: familia.categoria_id,
+      nombre: familia.categoria_nombre
+    }
+  };
+}
