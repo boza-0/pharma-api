@@ -11,3 +11,20 @@ export async function getCategoriaWithTree(id) {
   }
   return tree;
 }
+
+export async function getSubcategoria(categoriaId, id) {
+  const subcategoria = await repo.getSubcategoriaById(categoriaId, id);
+  if (!subcategoria) {
+    throw new Error('NOT_FOUND');
+  }
+
+  return {
+    id: subcategoria.id,
+    nombre: subcategoria.nombre,
+    abbreviation: subcategoria.abbreviation,
+    categoria: {
+      id: subcategoria.categoria_id,
+      nombre: subcategoria.categoria_nombre
+    }
+  };
+}
