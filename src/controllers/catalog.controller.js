@@ -27,3 +27,13 @@ export const getFamilia = asyncHandler(async (req, res) => {
   );
   res.json(familia);
 });
+
+export const listProductos = asyncHandler(async (req, res) => {
+  const productos = await service.listProductos(
+    req.params.categoriaId,
+    req.params.subcategoriaId,
+    req.params.familiaId
+  );
+
+  res.json(productos);
+});

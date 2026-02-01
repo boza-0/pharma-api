@@ -49,3 +49,15 @@ export async function getFamilia(categoriaId, subcategoriaId, id) {
     }
   };
 }
+
+export async function listProductos(
+  categoriaId,
+  subcategoriaId,
+  familiaId
+) {
+  return await repo.listProductosByFamilia(
+    categoriaId,
+    subcategoriaId,
+    familiaId
+  );
+}

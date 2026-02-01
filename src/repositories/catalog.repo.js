@@ -113,3 +113,64 @@ export async function getFamiliaById(categoriaId, subcategoriaId, id) {
 
   return rows[0] || null;
 }
+
+export async function listProductosByFamilia(
+  categoriaId,
+  subcategoriaId,
+  familiaId
+) {
+  const { rows } = await pool.query(
+    `
+    SELECT
+      p.id,
+      p.sku,
+
+      p.categoria_id,
+      c.nombre  AS categoria_nombre,
+
+      p.subcategoria_id,
+      sc.nombre AS subcategoria_nombre,
+
+      p.familia_id,
+      f.nombre  AS familia_nombre,
+
+      p.via_administracion_id,
+      va.nombre AS via_administracion_nombre,
+
+      p.marca,
+      p.nombre,
+      p.unidades_por_envase,
+      p.comentarios,
+      p.foto_url,
+
+      p.principio_activo,
+      p.concentracion,
+      p.forma_farmaceutica,
+
+      p.sustancia_controlada,
+      p.requiere_serializacion,
+
+      p.pvp,
+      p.stock
+    FROM productos p
+    JOIN categoria c
+      ON c.id = p.categoria_id
+    JOIN subcategoria sc
+      ON sc.id = p.subcategoria_id
+     AND sc.categoria_id = p.categoria_id
+    JOIN familia f
+      ON f.id = p.familia_id
+     AND f.subcategoria_id = p.subcategoria_id
+     AND f.categoria_id = p.categoria_id
+    JOIN via_administracion va
+      ON va.id = p.via_administracion_id
+    WHERE p.categoria_id = $1
+      AND p.subcategoria_id = $2
+      AND p.familia_id = $3
+    ORDER BY p.nombre
+    `,
+    [categoriaId, subcategoriaId, familiaId]
+  );
+
+  return rows;
+}
