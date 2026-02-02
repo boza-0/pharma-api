@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { router as apiRouter } from './routes/index.js';
+import apiRouter from './routes/index.js';
 import { notFound } from './middlewares/notFound.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
